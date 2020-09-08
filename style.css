@@ -32,7 +32,7 @@ body {
 
 .game-tile {
   cursor: pointer;
-  background: #f6da17;
+  background: #245d6e;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -41,7 +41,7 @@ body {
 }
 
 .game-tile:hover {
-  background-color: #f7c11a;
+  background-color: #334786;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 

@@ -76,6 +76,8 @@ const addTiles = () => {
 
 function checkPair(e) {
   console.log(e.target.parentNode);
+  game.tilesChecked.push(e.target.parentNode);
+  console.log(game.tilesChecked);
 }
 
 window.onload = addTiles();

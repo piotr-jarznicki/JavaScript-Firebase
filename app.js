@@ -66,6 +66,7 @@ const addTiles = () => {
   const sortedTilesImages = sortTilesImages();
   sortedTilesImages.forEach((el, index) => {
     const div = document.createElement("div");
+    div.addEventListener("click", checkPair);
     div.classList.add("game-tile");
     div.innerHTML = `<img src = '${sortedTilesImages[index]}'>`;
     div.id = `${arrIds[index]}`;
@@ -73,6 +74,8 @@ const addTiles = () => {
   });
 };
 
-function checkPair() {}
+function checkPair(e) {
+  console.log(e.target.parentNode);
+}
 
 window.onload = addTiles();

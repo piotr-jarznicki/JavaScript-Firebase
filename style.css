@@ -15,6 +15,14 @@ body {
   flex-direction: column;
 }
 
+.display {
+  opacity: 1;
+}
+
+.hide {
+  opacity: 0;
+}
+
 .game-board {
   border: 1px solid red;
   margin: 30px auto;

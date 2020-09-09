@@ -1,4 +1,7 @@
 const gameBoard = document.querySelector(".game-board");
+const gameScore = document.querySelector(".game-score");
+
+// console.log(gameScore);
 const gameTiles = 20;
 const game = {
   moves: 0,
@@ -27,34 +30,6 @@ const game = {
   ],
 };
 
-// Pomysł z obiektem, wyciągałbym id z obiektu i wstawiał wszczepiał do diva po czym porównywał idiki przy e.target
-
-const tiles = [
-  { id: 1, src: "img2/item_1.png " },
-  { id: 2, src: "img2/item_2.png " },
-  { id: 3, src: "img2/item_3.png " },
-  { id: 4, src: "img2/item_4.png " },
-  { id: 5, src: "img2/item_5.png " },
-  { id: 6, src: "img2/item_6.png " },
-  { id: 7, src: "img2/item_7.png " },
-  { id: 8, src: "img2/item_8.png " },
-  { id: 9, src: "img2/item_9.png " },
-  { id: 10, src: "img2/item_10.png " },
-];
-
-const arrIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Pomysł, żeby porównywać id i na ich podstawie sprawdzać czy mamy parę
-// tilesImages.sort(function () {
-//   return 0.5 - Math.random();
-// });
-
-arrIds.sort(function () {
-  return 0.5 - Math.random();
-});
-
-function checkPair() {
-  // Porównywanie src e.targetu i src previous.e.targetu(?)
-}
-
 const addTiles = () => {
   function sortTilesImages() {
     const sortedTilesImages = game.tilesImages.sort((arr) => {
@@ -67,17 +42,72 @@ const addTiles = () => {
   sortedTilesImages.forEach((el, index) => {
     const div = document.createElement("div");
     div.addEventListener("click", checkPair);
+    div.addEventListener("click", showPair);
+
     div.classList.add("game-tile");
-    div.innerHTML = `<img src = '${sortedTilesImages[index]}'>`;
-    div.id = `${arrIds[index]}`;
+    div.innerHTML = `<img class ="hide"  src = '${sortedTilesImages[index]}'>`;
     gameBoard.append(div);
   });
 };
 
-function checkPair(e) {
-  console.log(e.target.parentNode);
-  game.tilesChecked.push(e.target.parentNode);
-  console.log(game.tilesChecked);
+function showPair(e) {
+  // Mechanizm odkrywania karty
+  console.log(e.target);
+  e.target.classList.remove("hide");
+  if (game.tilesChecked.length === 2) {
+    return;
+  }
 }
 
+function checkPair(e) {
+  // Mechanizm sprawdzania czy karty są parą
+
+  console.log(gameBoardArray);
+  if (game.tilesChecked.includes(e.target.parentNode)) {
+    return;
+  } else {
+    game.tilesChecked.push(e.target.parentNode);
+  }
+  // console.log(game.tilesChecked.length);
+  if (game.tilesChecked.length === 2) {
+    console.log("Mam dwa");
+    // gameBoardArray.forEach((child) => {
+    //   child.setAttribute("disabled", "disabled");
+    // });
+    checkWin();
+    setTimeout(hide, 3000);
+
+    // game.tilesChecked[0].classList.remove("hide");
+    // game.tilesChecked[1].classList.remove("hide");
+  }
+}
+
+function checkWin() {
+  const img0 = [...game.tilesChecked[0].children];
+  [img2] = img0;
+  const img1 = [...game.tilesChecked[1].children];
+  [img3] = img1;
+  console.log(img2.src);
+  console.log(img3.src);
+
+  if (img2.src === img3.src) {
+    console.log("Masz parę!");
+  } else {
+    game.moves += 1;
+    gameScore.innerText = game.moves;
+    console.log("Nie masz pary!");
+  }
+}
+
+function hide() {
+  const img0 = [...game.tilesChecked[0].children];
+  [img2] = img0;
+  const img1 = [...game.tilesChecked[1].children];
+  [img3] = img1;
+  console.log(gameBoard.children);
+
+  img2.classList.add("hide");
+  img3.classList.add("hide");
+  game.tilesChecked.length = "";
+}
 window.onload = addTiles();

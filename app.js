@@ -6,17 +6,11 @@ const popUp = document.querySelector(".win-overlay");
 const resultNumber = document.querySelector(".result-number");
 buttonPlay.addEventListener("click", startGame);
 buttonExit.addEventListener("click", exitPopUp);
-console.log(buttonExit, popUp);
-function exitPopUp() {
-  popUp.style.display = "none";
-  startGame();
-}
 
-const gameTiles = 20;
-let pairsArray = [];
 const game = {
   moves: 0,
   tilesChecked: [],
+  pairsArray: [],
   tilesImages: [
     "img2/item_1.png ",
     "img2/item_2.png ",
@@ -91,7 +85,7 @@ function checkPair() {
   [img3] = img1;
 
   if (img2.src === img3.src) {
-    pairsArray.push(img2, img3);
+    game.pairsArray.push(img2, img3);
     game.tilesChecked.length = "";
   } else {
     game.moves += 1;
@@ -104,7 +98,7 @@ function checkPair() {
 
 function checkResult() {
   // Sprawdza czy gra została zakończona
-  if (pairsArray.length === 20) {
+  if (game.pairsArray.length === 20) {
     popUp.style.display = "flex";
   }
 }
@@ -122,6 +116,11 @@ function hideImage() {
 function startGame() {
   gameBoard.innerHTML = "";
   addTiles();
-  pairsArray = [];
+  game.pairsArray = [];
   game.tilesChecked = [];
+}
+
+function exitPopUp() {
+  popUp.style.display = "none";
+  startGame();
 }

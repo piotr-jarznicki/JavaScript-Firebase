@@ -9,9 +9,11 @@ buttonExit.addEventListener("click", exitPopUp);
 console.log(buttonExit, popUp);
 function exitPopUp() {
   popUp.style.display = "none";
+  startGame();
 }
+
 const gameTiles = 20;
-const winArr = [];
+let pairsArray = [];
 const game = {
   moves: 0,
   tilesChecked: [],
@@ -38,12 +40,7 @@ const game = {
     "img2/item_10.png ",
   ],
 };
-resultNumber.innerText = game.moves;
-function startGame() {
-  addTiles();
-}
 
-// return all;
 const addTiles = () => {
   function sortTilesImages() {
     const sortedTilesImages = game.tilesImages.sort((arr) => {
@@ -63,8 +60,6 @@ const addTiles = () => {
 
 function showTile(e) {
   // Mechanizm odkrywania karty i dodawania karty
-  console.log(game.tilesChecked.length);
-  console.log(e.target);
   if (game.tilesChecked.length < 2) {
     e.target.classList.remove("hide");
     addTileToArray(e);
@@ -72,9 +67,10 @@ function showTile(e) {
     return;
   }
   if (game.tilesChecked.length === 2) {
-    checkPair(e);
+    checkPair();
   }
 }
+
 function addTileToArray(e) {
   // Jeśli dwa razy został kliknięty ten sam element i tablica jest już "zapełniona"
   if (
@@ -87,42 +83,33 @@ function addTileToArray(e) {
   }
 }
 
-function checkPair(e) {
+function checkPair() {
   // Mechanizm sprawdzania czy karty są parą
-  checkWin();
-  check();
-}
-function check2(el) {
-  return el.classList === "";
-}
-
-function check() {
-  if (winArr.length === 20) {
-    console.log("Wygrałeś");
-    popUp.style.display = "flex";
-  }
-}
-
-function checkWin() {
   const img0 = [...game.tilesChecked[0].children];
   [img2] = img0;
   const img1 = [...game.tilesChecked[1].children];
   [img3] = img1;
 
   if (img2.src === img3.src) {
-    winArr.push(img2, img3);
-    console.log(winArr);
-    console.log("Masz parę!");
+    pairsArray.push(img2, img3);
     game.tilesChecked.length = "";
   } else {
     game.moves += 1;
     gameScore.innerText = game.moves;
-    setTimeout(hide, 1000);
-    console.log("Nie masz pary!");
+    resultNumber.innerText = game.moves;
+    setTimeout(hideImage, 1000);
+  }
+  checkResult();
+}
+
+function checkResult() {
+  // Sprawdza czy gra została zakończona
+  if (pairsArray.length === 20) {
+    popUp.style.display = "flex";
   }
 }
 
-function hide() {
+function hideImage() {
   const img0 = [...game.tilesChecked[0].children];
   [img2] = img0;
   const img1 = [...game.tilesChecked[1].children];
@@ -130,4 +117,11 @@ function hide() {
   img2.classList.add("hide");
   img3.classList.add("hide");
   game.tilesChecked.length = "";
+}
+
+function startGame() {
+  gameBoard.innerHTML = "";
+  addTiles();
+  pairsArray = [];
+  game.tilesChecked = [];
 }

@@ -9,7 +9,7 @@ body {
   margin: 0;
 }
 .win-overlay {
-  display: flex;
+  display: none;
   position: absolute;
   align-items: center;
   justify-content: center;

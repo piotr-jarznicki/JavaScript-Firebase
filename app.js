@@ -118,6 +118,8 @@ function startGame() {
   addTiles();
   game.pairsArray = [];
   game.tilesChecked = [];
+  game.moves = 0;
+  gameScore.innerText = game.moves;
 }
 
 function exitPopUp() {

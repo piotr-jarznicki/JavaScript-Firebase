@@ -44,7 +44,7 @@ body {
   position: relative;
   overflow: hidden;
   width: 800px;
-  height: 600px;
+  height: 640px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(4, 1fr);
@@ -53,7 +53,14 @@ body {
   padding: 1rem;
 }
 
+.game-board img {
+  padding: 10px;
+}
+
 .game-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   background: #245d6e;
   background-position: center;

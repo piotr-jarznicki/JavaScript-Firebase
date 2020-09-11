@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDoApp</title>
+    <script
+      src="https://kit.fontawesome.com/88c9d13e24.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ropa+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 class="title">Epic to-do list</h1>
+      <div class="con">
+        <input type="text" class="add-task-input" />
+        <button class="btn-add-task"><i class="fas fa-plus"></i></button>
+      </div>
+
+      <div class="lists-container">
+        <div class="active-tasks">
+          <p class="active-tasks-text">active tasks</p>
+          <div class="background">
+            <p class="task-number active-n">0</p>
+          </div>
+        </div>
+        <div class="finished-tasks">
+          <p class="finished-tasks-text">finished tasks</p>
+          <div class="background">
+            <p class="task-number finished">0</p>
+          </div>
+        </div>
+        <div class="deleted-tasks">
+          <p class="deleted-tasks-text">deleted tasks</p>
+          <div class="background red">
+            <p class="task-number deleted">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="active">
+        <h2 class="message">
+          Your list of active tasks is empty, add some tasks!
+          <ul class="active-tasks-list"></ul>
+        </h2>
+      </div>
+      <div class="deleted-div">
+        <h2 class="message">Your list of deleted tasks is empty, great job!</h2>
+        <ul class="deleted-tasks-list"></ul>
+      </div>
+      <div class="finished-div"></div>
+    </div>
+  </body>
+</html>

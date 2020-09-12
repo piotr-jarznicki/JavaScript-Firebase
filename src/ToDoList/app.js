@@ -13,6 +13,8 @@ const deletedTasksList = get(".deleted-tasks-list");
 
 const numberOfTasks = getAll(".task-number");
 
+const messages = getAll(".message");
+
 let activeTasks = [];
 let deletedTasks = [];
 const updateValues = (actionType) => {
@@ -25,6 +27,13 @@ const updateValues = (actionType) => {
   }
 };
 
+const updateMessage = (actionType) => {
+  if (actionType === "add") {
+    console.log(messages);
+    messages[0].style.display = "none";
+  }
+};
+
 createTaskButton.addEventListener("click", createTask);
 function createTask() {
   const inputText = createTaskInput.value;
@@ -34,13 +43,12 @@ function createTask() {
     const id = activeTasks.length;
     activeTasks = [...activeTasks, { id: id, text: inputText }];
     updateValues("create");
+    updateMessage("add");
     renderTask();
   }
 }
 
-const renderTask = (tempActiveTasks) => {
-  const del = tempActiveTasks;
-  console.log(del);
+const renderTask = () => {
   if (true) {
     activeTasksList.innerHTML = "";
     activeTasks.forEach((task) => {
@@ -48,9 +56,7 @@ const renderTask = (tempActiveTasks) => {
         <li class="task" id = "${task.id}" >
                     <div class="task-container ">
                         <div class="white-background">
-                            <p class="task-info">${
-                              activeTasks[task.id].text
-                            }</p>
+                            <p class="task-info">${task.text}</p>
                         </div>
                         <div class="delete-task"> <i class="fas fa-trash"></i></div>
                         <div class="complete-task"><i class="fas fa-check"></i></div>
@@ -67,17 +73,14 @@ const renderTask = (tempActiveTasks) => {
 
 const deleteTask = (e) => {
   const taskId = e.target.parentElement.parentElement.id;
-
-  console.log("task.id:", activeTasks[taskId].id, "tasketargetId:", taskId);
-
-  const el = activeTasks.splice(activeTasks[taskId], 1);
-  const kk = [...el];
-  // W deletedTask nie będzie zachowana kolejność id, trzeba find index
-  deletedTasks.push(kk);
-  console.log(deletedTasks);
-  renderTask(activeTasks);
-  console.log(activeTasks);
-  console.log(kk);
-
+  const index = activeTasks.findIndex((task) => {
+    if (task.id === Number(taskId)) {
+      return true;
+    }
+  });
+  const taskIndexArr = activeTasks.splice(index, 1);
+  const deletedTask = taskIndexArr.shift();
+  deletedTasks.push(deletedTask);
+  renderTask();
   updateValues("delete");
 };

@@ -20,10 +20,8 @@ const updateValues = (actionType) => {
   if (actionType === "create") {
     numberOfTasks[0].innerText = activeTasks.length;
   } else if (actionType === "delete") {
-    numberOfTasks[1].innerText = deletedTasks.length;
+    numberOfTasks[2].innerText = deletedTasks.length;
     numberOfTasks[0].innerText = activeTasks.length;
-  } else {
-    numberOfTasks[2].innerText = completedTasks.length;
   }
 };
 
@@ -37,12 +35,13 @@ function createTask() {
     activeTasks = [...activeTasks, { id: id, text: inputText }];
     updateValues("create");
     renderTask();
-    console.log(activeTasks);
   }
 }
 
-const renderTask = () => {
-  if (activeTasks.length !== 0) {
+const renderTask = (tempActiveTasks) => {
+  const del = tempActiveTasks;
+  console.log(del);
+  if (true) {
     activeTasksList.innerHTML = "";
     activeTasks.forEach((task) => {
       activeTasksList.innerHTML += `
@@ -68,11 +67,17 @@ const renderTask = () => {
 
 const deleteTask = (e) => {
   const taskId = e.target.parentElement.parentElement.id;
-  activeTasks.forEach(function (deletedTask, index = task.id) {
-    activeTasks.splice(index, 1);
-    deletedTasks.push(deletedTask);
-  });
+
+  console.log("task.id:", activeTasks[taskId].id, "tasketargetId:", taskId);
+
+  const el = activeTasks.splice(activeTasks[taskId], 1);
+  const kk = [...el];
+  // W deletedTask nie będzie zachowana kolejność id, trzeba find index
+  deletedTasks.push(kk);
+  console.log(deletedTasks);
+  renderTask(activeTasks);
+  console.log(activeTasks);
+  console.log(kk);
+
   updateValues("delete");
-  console.log(activeTasks, deletedTasks);
-  //   renderTask();
 };

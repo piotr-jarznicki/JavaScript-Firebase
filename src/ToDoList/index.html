@@ -19,8 +19,12 @@
   <body>
     <div class="container">
       <h1 class="title">Epic to-do list</h1>
-      <div class="con">
-        <input type="text" class="add-task-input" />
+      <div class="input-container">
+        <input
+          type="text"
+          class="add-task-input"
+          placeholder="Enter text of your task (Max 100 letters)"
+        />
         <button class="btn-add-task"><i class="fas fa-plus"></i></button>
       </div>
 
@@ -52,10 +56,11 @@
         <ul class="active-tasks-list"></ul>
       </div>
       <div class="deleted-div">
-        <h2 class="message">Your list of deleted tasks is empty, great job!</h2>
         <ul class="deleted-tasks-list"></ul>
       </div>
-      <div class="finished-div"></div>
+      <div class="finished-div">
+        <ul class="finished-tasks-list"></ul>
+      </div>
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
 
 body {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
 
   font-family: "Ropa Sans", sans-serif;
   background: rgb(0, 36, 27);
@@ -58,7 +58,7 @@ body {
   cursor: pointer;
 }
 
-.con {
+.input-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,10 +97,9 @@ li {
 
 .task-container {
   display: flex;
-  justify-content: start;
-  margin: 0 auto;
+  justify-content: center;
+  margin: 2em auto;
   width: 80%;
-  margin: 1em 0 0 2em;
 }
 
 .complete-task,
@@ -120,9 +119,13 @@ li {
   pointer-events: none;
 }
 
-.deleted-div .message {
-  display: none;
+::placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+  opacity: 0.5;
+  padding-left: 1em;
 }
+
 .complete-task:hover {
   background-color: rgb(123, 209, 182);
   cursor: pointer;
@@ -168,11 +171,7 @@ li {
   height: 3em;
   background-color: rgb(123, 209, 182);
 }
-.active {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 .deleted-tasks {
   background-color: #fe7979;
 }
@@ -195,4 +194,9 @@ li {
 
 .message {
   margin-top: 2em;
+}
+
+ul {
+  display: flex;
+  justify-content: center;
 }

@@ -18,8 +18,12 @@ body {
   );
   display: flex;
   justify-content: center;
-  align-items: center;
   color: white;
+  overflow-x: hidden;
+}
+
+.title {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .container {
@@ -99,7 +103,7 @@ li {
   display: flex;
   justify-content: center;
   margin: 2em auto;
-  width: 80%;
+  width: 60%;
 }
 
 .complete-task,
@@ -113,6 +117,12 @@ li {
   align-items: center;
   justify-content: center;
   transition: 0.2s;
+}
+
+.active,
+.deleted-div,
+.finished-div {
+  position: relative;
 }
 
 .fas {
@@ -194,9 +204,10 @@ li {
 
 .message {
   margin-top: 2em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
-
 ul {
-  display: flex;
-  justify-content: center;
+  position: absolute;
+  width: 100%;
+  margin: 0 auto;
 }

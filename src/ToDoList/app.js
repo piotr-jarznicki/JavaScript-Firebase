@@ -81,7 +81,6 @@ const renderTask = (
                         </div>
                         <div class="redo-task"> <i class="fas fa-redo"></i></div>
                     </div>
-
         `;
     else if (tasksArray === finishedTasks) {
       htmlTasksList.innerHTML += `
@@ -181,6 +180,7 @@ function showDeletedTasks() {
   deletedTasksList.style.display = "block";
   finishedTasksList.style.display = "none";
   createTaskInput.disabled = true;
+  message.style.display = "none";
   renderTask(deletedTasks, deletedTasksList);
 }
 function showFinishedTasks() {
@@ -188,5 +188,6 @@ function showFinishedTasks() {
   deletedTasksList.style.display = "none";
   finishedTasksList.style.display = "block";
   createTaskInput.disabled = true;
+  message.style.display = "none";
   renderTask(finishedTasks, finishedTasksList);
 }

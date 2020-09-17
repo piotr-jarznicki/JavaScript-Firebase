@@ -4,4 +4,4 @@ Repozytorium dla Projektu nr 2.
 
 ## Do zrobienia
 
-Memory game i Flappy Bird.
+Memory game, To do list i Bomberman

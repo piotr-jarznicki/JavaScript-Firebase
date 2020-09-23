@@ -58,6 +58,12 @@ body {
 input {
   padding: 1.2em 0;
   border: none;
+  color: tomato;
+}
+
+::placeholder {
+  color: tomato;
+  padding-left: 1em;
 }
 .highscore-list {
   list-style: none;

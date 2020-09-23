@@ -26,7 +26,7 @@ function renderHighscores(highscores) {
   list.innerHTML = "";
   highscores.forEach((highscore) => {
     const data = highscore.data();
-
+    const dataArr = [data];
     list.innerHTML += `
   <li>${data.username} <span>${data.highscore}</span></li>
   `;
@@ -35,14 +35,18 @@ function renderHighscores(highscores) {
 
 function addUsername() {
   const input = document.querySelector(".username-input");
-  firebase.firestore().collection("memo-highscores").add({
-    username: input.value,
-    highscore: game.moves,
-  });
-  input.value = "";
-  game.moves = 0;
-  gameScore.innerText = game.moves;
-  resultNumber.innerText = game.moves;
+  if (input.value !== "") {
+    firebase.firestore().collection("memo-highscores").add({
+      username: input.value,
+      highscore: game.moves,
+    });
+    input.value = "";
+    game.moves = 0;
+    gameScore.innerText = game.moves;
+    resultNumber.innerText = game.moves;
+  } else {
+    alert("Input jest pusty, podaj właściwą nazwę użytkownika!");
+  }
 }
 
 function showHighscorePopUp() {

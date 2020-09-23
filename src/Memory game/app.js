@@ -3,10 +3,21 @@ const gameScore = document.querySelector(".game-score");
 const buttonPlay = document.querySelector(".game-start");
 const buttonExit = document.querySelector(".win-overlay button");
 const popUp = document.querySelector(".win-overlay");
+const highscorePopUp = document.querySelector(".highscore-overlay");
+const showHighscorePopUpButton = document.querySelector(".game-highscore");
+const hideHighscorePopUpButton = document.querySelector(".exit-highscore");
 const resultNumber = document.querySelector(".result-number");
 buttonPlay.addEventListener("click", startGame);
 buttonExit.addEventListener("click", exitPopUp);
+showHighscorePopUpButton.addEventListener("click", showHighscorePopUp);
+hideHighscorePopUpButton.addEventListener("click", hideHighscorePopUp);
 
+function showHighscorePopUp() {
+  highscorePopUp.style.display = "flex";
+}
+function hideHighscorePopUp() {
+  highscorePopUp.style.display = "none";
+}
 const game = {
   moves: 0,
   tilesChecked: [],

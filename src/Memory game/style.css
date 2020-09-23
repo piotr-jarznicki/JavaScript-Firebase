@@ -22,17 +22,46 @@ body {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.win-overlay button {
+.win-overlay button,
+.highscore-overlay button {
   margin-top: 10em;
   position: absolute;
   background: white;
   color: tomato;
 }
 
+.highscore-overlay {
+  display: none;
+  position: absolute;
+  justify-content: center;
+  width: 50vw;
+  height: 80vh;
+  z-index: 10;
+  color: white;
+  background: tomato;
+  font-size: 20px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+.highscore-overlay button {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: tomato;
+}
 .game {
   display: flex;
   justify-content: center;
   flex-direction: column;
+}
+
+.highscore-list {
+  list-style: none;
+}
+
+.player-highscore {
+  margin-bottom: 1em;
 }
 
 .hide {
@@ -94,6 +123,10 @@ body {
   font-weight: bold;
   line-height: 1rem;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.button-container {
+  display: flex;
 }
 
 button {

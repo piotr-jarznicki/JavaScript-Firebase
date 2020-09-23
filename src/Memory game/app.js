@@ -1,16 +1,49 @@
 const gameBoard = document.querySelector(".game-board");
 const gameScore = document.querySelector(".game-score");
 const buttonPlay = document.querySelector(".game-start");
-const buttonExit = document.querySelector(".win-overlay button");
+const buttonExit = document.querySelector(".win-overlay .exit");
 const popUp = document.querySelector(".win-overlay");
 const highscorePopUp = document.querySelector(".highscore-overlay");
 const showHighscorePopUpButton = document.querySelector(".game-highscore");
 const hideHighscorePopUpButton = document.querySelector(".exit-highscore");
+const addUsernameButton = document.querySelector(".add-username");
 const resultNumber = document.querySelector(".result-number");
 buttonPlay.addEventListener("click", startGame);
 buttonExit.addEventListener("click", exitPopUp);
 showHighscorePopUpButton.addEventListener("click", showHighscorePopUp);
 hideHighscorePopUpButton.addEventListener("click", hideHighscorePopUp);
+addUsernameButton.addEventListener("click", addUsername);
+firebase
+  .firestore()
+  .collection("memo-highscores")
+  .onSnapshot((highscores) => {
+    renderHighscores(highscores);
+  });
+
+function renderHighscores(highscores) {
+  const list = document.querySelector(".highscore-list");
+
+  list.innerHTML = "";
+  highscores.forEach((highscore) => {
+    const data = highscore.data();
+
+    list.innerHTML += `
+  <li>${data.username} <span>${data.highscore}</span></li>
+  `;
+  });
+}
+
+function addUsername() {
+  const input = document.querySelector(".username-input");
+  firebase.firestore().collection("memo-highscores").add({
+    username: input.value,
+    highscore: game.moves,
+  });
+  input.value = "";
+  game.moves = 0;
+  gameScore.innerText = game.moves;
+  resultNumber.innerText = game.moves;
+}
 
 function showHighscorePopUp() {
   highscorePopUp.style.display = "flex";
@@ -89,7 +122,6 @@ function addTileToArray(e) {
 }
 
 function checkPair() {
-  // Mechanizm sprawdzania czy karty są parą
   const img0 = [...game.tilesChecked[0].children];
   [img2] = img0;
   const img1 = [...game.tilesChecked[1].children];

@@ -5,20 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memory game</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyDzz-aFkoQUv2b9Yqmt3iql3ze82FzyoJg",
+        authDomain: "memory-game-ea7c9.firebaseapp.com",
+        databaseURL: "https://memory-game-ea7c9.firebaseio.com",
+        projectId: "memory-game-ea7c9",
+        storageBucket: "memory-game-ea7c9.appspot.com",
+        messagingSenderId: "923610847329",
+        appId: "1:923610847329:web:1c0abb30bd042c54ce3220",
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
   </head>
   <body>
     <div class="win-overlay">
-      <p class="result-text">
-        Gratulacje! Ukończyłeś grę, liczba ruchów:<span
-          class="result-number"
-        ></span>
-      </p>
-      <button class="exit">Zagraj jeszcze raz</button>
+      <div class="container">
+        <p class="result-text">
+          Gratulacje! Ukończyłeś grę, liczba ruchów:
+          <span class="result-number">0</span>
+        </p>
+        <label for="">
+          <input
+            placeholder="Podaj nazwę użytkownika"
+            type="text"
+            class="username-input"
+          />
+          <button class="add-username">Dodaj nazwę</button>
+        </label>
+        <button class="exit">Zagraj jeszcze raz</button>
+      </div>
     </div>
 
     <div class="highscore-overlay">
-      <div class="container">
+      <div class="container-k">
         <p class="result-text">Lista najlepszych graczy:</p>
+        <ul class="highscore-list"></ul>
       </div>
       <button class="exit-highscore">Zamknij</button>
     </div>

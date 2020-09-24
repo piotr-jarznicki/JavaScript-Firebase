@@ -16,6 +16,7 @@ addUsernameButton.addEventListener("click", addUsername);
 firebase
   .firestore()
   .collection("memo-highscores")
+  .orderBy("highscore")
   .onSnapshot((highscores) => {
     renderHighscores(highscores);
   });
@@ -26,7 +27,6 @@ function renderHighscores(highscores) {
   list.innerHTML = "";
   highscores.forEach((highscore) => {
     const data = highscore.data();
-    const dataArr = [data];
     list.innerHTML += `
   <li>${data.username} <span>${data.highscore}</span></li>
   `;

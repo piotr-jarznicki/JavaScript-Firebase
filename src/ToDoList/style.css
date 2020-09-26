@@ -5,6 +5,7 @@
 }
 
 body {
+  position: relative;
   width: 100vw;
   min-height: 100vh;
 
@@ -32,6 +33,92 @@ body {
   text-align: center;
   margin: 0 auto;
   padding: 5em;
+}
+
+.sign-out-button.submit-sign-in {
+  position: absolute;
+  bottom: 5vh;
+  right: 5vw;
+  padding: 1em 2em;
+}
+
+.login-page,
+.register-page {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  background: rgb(0, 36, 27);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 36, 27, 1) 0%,
+    rgba(109, 203, 227, 1) 0%,
+    rgba(51, 207, 150, 1) 100%
+  );
+}
+
+.register-page {
+  display: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2 {
+  margin-bottom: 1em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+label {
+  margin-bottom: 0.3em;
+}
+input {
+  margin-bottom: 2em;
+  padding: 0.8em 2em;
+  border: none;
+  border-radius: 3px;
+  outline: none;
+  font-weight: bold;
+  color: grey;
+
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+input:focus {
+  outline: 1px solid rgb(137, 238, 201) 100%;
+}
+.submit-sign-in {
+  margin-top: -1em;
+  padding: 0.9em 0;
+  border: none;
+  border-radius: 3px;
+  background: rgb(129, 247, 203) 100%;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.form-text {
+  margin-top: 0.3em;
+  font-size: 0.9rem;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+.sign-up-link,
+.sign-in-link {
+  text-decoration: none;
+  color: #023549;
+}
+
+.submit-sign-in:hover {
+  cursor: pointer;
+  background: rgb(113, 238, 192) 100%;
 }
 
 .add-task-input {

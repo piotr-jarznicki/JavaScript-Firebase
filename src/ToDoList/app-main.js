@@ -2,8 +2,10 @@ firebase.initializeApp(firebaseConfig);
 const firestoreActiveTasks = firebase.firestore().collection("activeTasks");
 const firestoreFinishedTasks = firebase.firestore().collection("finishedTasks");
 const firestoreDeletedTasks = firebase.firestore().collection("deletedTasks");
-
 firestoreActiveTasks.onSnapshot((activeTasks) => renderTasks(activeTasks));
+firestoreActiveTasks.onSnapshot((activeTasks) => updateValues(activeTasks));
+firestoreDeletedTasks.onSnapshot((deletedTasks) => updateValues(deletedTasks));
+firestoreFinishedTasks.onSnapshot(() => updateValues);
 
 const get = (...args) => document.querySelector(...args);
 const getAll = (...args) => document.querySelectorAll(...args);
@@ -20,7 +22,7 @@ const deletedTasksList = get(".deleted-tasks-list");
 const finishedTasksList = get(".finished-tasks-list");
 
 const numberOfTasks = getAll(".task-number");
-
+console.log(numberOfTasks)
 const message = get(".message");
 
 const inputContainer = get(".input-container");
@@ -48,6 +50,7 @@ loginForm.addEventListener("submit", signInUser);
 showSignUpModalButton.addEventListener("click", showSignUpModal);
 showSignInModalButton.addEventListener("click", showSignInModal);
 signOutButton.addEventListener("click", signOutUser);
+// e.preventDefault();
 function showSignUpModal(e) {
   e.preventDefault();
 
@@ -77,7 +80,7 @@ function signUpUser(e) {
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       showAppView();
-    });
+    }).catch(error => alert(error))
 
   registerForm.reset();
 }
@@ -91,7 +94,7 @@ function signOutUser(e) {
     .then(() => {
       signInModal.style.display = "flex";
       signUpModal.style.display = "none";
-    });
+    })
 }
 
 function signInUser(e) {
@@ -104,26 +107,24 @@ function signInUser(e) {
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       showAppView();
-    });
+    }).catch(error => alert(error))
   loginForm.reset();
 }
 
-const updateValues = (actionType) => {
-  // Zamień to na switcha.
-  if (actionType === "create") {
-    numberOfTasks[0].innerText = activeTasks.length;
-  } else if (actionType === "delete") {
-    numberOfTasks[2].innerText = deletedTasks.length;
-    numberOfTasks[0].innerText = activeTasks.length;
-  } else if (actionType === "finish") {
-    numberOfTasks[1].innerText = finishedTasks.length;
-    numberOfTasks[0].innerText = activeTasks.length;
-  } else if (actionType === "restore") {
-    numberOfTasks[2].innerText = deletedTasks.length;
-    numberOfTasks[0].innerText = activeTasks.length;
-  }
-};
+function updateValues(tasks) {
 
+    firestoreActiveTasks.get().then((snap) => {
+      numberOfTasks[0].innerText = snap.size;
+    })
+    firestoreDeletedTasks.get().then((snap) => {
+      numberOfTasks[2].innerText = snap.size;
+    });
+  firestoreFinishedTasks.get().then((snap) => {
+    numberOfTasks[1].innerText = snap.size;
+  });
+}
+
+updateValues();
 const updateMessage = () => {
   if (activeTasks.length > 0) {
     message.style.display = "none";
@@ -136,93 +137,34 @@ createTaskButton.addEventListener("click", createTask);
 function createTask() {
   const maximumLetterAmount = 40;
   const inputText = createTaskInput.value;
-  const taskId = activeTasks.length;
   const isInputTextValueEqual0 = inputText.trim().length === 0;
   const isInputTextValueTooLong = inputText.trim().length > maximumLetterAmount;
   isInputTextValueEqual0 || isInputTextValueTooLong
     ? alert("Add valid task text!")
-    : (activeTasks = [...activeTasks, { id: taskId, text: inputText }]) &&
-      firestoreActiveTasks.add({ id: taskId, text: inputText });
+    : firestoreActiveTasks.add({ text: inputText });
 
-  updateValues("create");
   updateMessage();
-  firestoreActiveTasks.onSnapshot((activeTasks) => renderTasks(activeTasks));
-
   createTaskInput.value = "";
 }
 
-// function renderTask(tasksArray = activeTasks, htmlTasksList = activeTasksList) {
-//   htmlTasksList.innerHTML = "";
-//   tasksArray.forEach((task) => {
-//     const data = task.data();
+const renderTasks = (activeTasks) => {
+  activeTasksList.innerHTML = "";
+  activeTasks !== undefined
+    ? activeTasks.forEach((task) => {
+        const data = task.data();
+        activeTasksList.innerHTML += `
+   <li class="task" id = "${task.id}" >
+               <div class="task-container ">
+                   <div class="white-background">
+                       <p class="task-info">${data.text}</p>
+                   </div>
+                   <div class="delete-task"> <i class="fas fa-trash"></i></div>
+                   <div class="complete-task"><i class="fas fa-check"></i></div>
+               </div>
+   `;
+      })
+    : console.log("elko");
 
-//     if (tasksArray === deletedTasks)
-//       htmlTasksList.innerHTML += `
-//         <li  class="task" id = "${data.id}" >
-//                     <div class="task-container ">
-//                         <div class="white-background">
-//                             <p class="task-info">${data.text}</p>
-//                         </div>
-//                         <div class="redo-task"> <i class="fas fa-redo"></i></div>
-//                     </div>
-//         `;
-//   });
-// }
-
-const renderTasks = (
-  tasksArray = activeTasks,
-  htmlTasksList = activeTasksList
-) => {
-  htmlTasksList.innerHTML = "";
-  tasksArray.forEach((task) => {
-    // console.log(task.id);
-    if (tasksArray === deletedTasks) {
-      firestoreDeletedTasks.onSnapshot((deletedTasks) =>
-        renderTasks(deletedTasks)
-      );
-      const data = task.data();
-
-      htmlTasksList.innerHTML += `
-        <li  class="task" id = "${data.id}" >
-                    <div class="task-container ">
-                        <div class="white-background">
-                            <p class="task-info">${data.text}</p>
-                        </div>
-                        <div class="redo-task"> <i class="fas fa-redo"></i></div>
-                    </div>
-        `;
-    } else if (tasksArray === finishedTasks) {
-      firestoreFinishedTasks.onSnapshot((finishedTasks) =>
-        renderTasks(finishedTasks)
-      );
-      const data = task.data();
-      htmlTasksList.innerHTML += `
-      <li style="opacity:0.5; pointer-events:none" class="task" id = "${data.id}" >
-                  <div class="task-container ">
-                      <div class="white-background">
-                          <p class="task-info">${data.text}</p>
-                      </div>
-                      <div  class="delete-task"> <i class="fas fa-trash"></i></div>
-                      <div  class="complete-task"><i class="fas fa-check"></i></div>
-                  </div>
-
-      `;
-    } else {
-      // firestoreActiveTasks.onSnapshot((activeTasks) => renderTasks(activeTasks));
-      const data = task.data();
-      htmlTasksList.innerHTML += `
-      <li class="task" id = "${data.id}" >
-                  <div class="task-container ">
-                      <div class="white-background">
-                          <p class="task-info">${data.text}</p>
-                      </div>
-                      <div class="delete-task"> <i class="fas fa-trash"></i></div>
-                      <div class="complete-task"><i class="fas fa-check"></i></div>
-                  </div>
-
-      `;
-    }
-  });
   const deleteTaskButtons = getAll("li.task .task-container .delete-task");
   deleteTaskButtons.forEach((deleteButton) => {
     deleteButton.addEventListener("click", deleteTask);
@@ -232,6 +174,22 @@ const renderTasks = (
   finishTaskButtons.forEach((finishButton) => {
     finishButton.addEventListener("click", finishTask);
   });
+};
+
+const renderDeletedTasks = (deletedTasks) => {
+  deletedTasksList.innerHTML = "";
+  deletedTasks.forEach((task) => {
+    const data = task.data();
+    deletedTasksList.innerHTML += `
+    <li class="task" id = "${task.id}" >
+    <div class="task-container ">
+        <div class="white-background">
+            <p class="task-info">${data.text}</p>
+        </div>
+        <div class="redo-task"> <i class="fas fa-redo"></i></div>
+    </div>
+     `;
+  });
 
   const restoreTaskButtons = getAll("li.task .task-container .redo-task");
   restoreTaskButtons.forEach((restoreButton) => {
@@ -239,58 +197,79 @@ const renderTasks = (
   });
 };
 
+const renderFinishedTasks = (finishedTasks) => {
+  finishedTasksList.innerHTML = "";
+  finishedTasks.forEach((task) => {
+    const data = task.data();
+
+    finishedTasksList.innerHTML += `
+      <li style="opacity:0.5; pointer-events:none" class="task" id = "${data.id}" >
+      <div class="task-container ">
+          <div class="white-background">
+              <p class="task-info">${data.text}</p>
+          </div>
+          <div  class="delete-task"> <i class="fas fa-trash"></i></div>
+          <div  class="complete-task"><i class="fas fa-check"></i></div>
+      </div>
+       `;
+  });
+};
+
 const deleteTask = (e) => {
   const taskId = e.target.parentElement.parentElement.id;
-  const index = activeTasks.findIndex((task) => {
-    if (task.id === Number(taskId)) {
-      return true;
-    }
-  });
-  console.log(activeTasks);
-  const taskIndexArr = activeTasks.splice(index, 1);
-  console.log(taskIndexArr);
 
-  const deletedTask = taskIndexArr.shift();
+  firestoreActiveTasks
+    .doc(taskId)
+    .get()
+    .then((task) => {
+      firestoreDeletedTasks.add(task.data());
+      firestoreActiveTasks
+        .doc(taskId)
+        .delete()
+        .then((el) => {
+          console.log(el);
+        });
+    })
+    .catch((error) => {});
 
-  console.log(deletedTask);
-  deletedTasks.push(deletedTask);
-  firestoreDeletedTasks.add(deletedTask);
-  firestoreDeletedTasks.onSnapshot((deletedTasks) => renderTasks(deletedTasks));
-
-  renderTasks();
-  updateValues("delete");
   updateMessage();
 };
 
 const finishTask = (e) => {
   const taskId = e.target.parentElement.parentElement.id;
-  const index = activeTasks.findIndex((task) => {
-    if (task.id === Number(taskId)) {
-      return true;
-    }
-  });
-  const taskIndexArr = activeTasks.splice(index, 1);
-  const finishedTask = taskIndexArr.shift();
-  finishedTasks.push(finishedTask);
-  renderTasks();
-  updateValues("finish");
+  firestoreActiveTasks
+    .doc(taskId)
+    .get()
+    .then((task) => {
+      firestoreFinishedTasks.add(task.data());
+      firestoreActiveTasks
+        .doc(taskId)
+        .delete()
+        .then((el) => {
+          console.log(el);
+        });
+    })
+    .catch((error) => {});
 };
 
 const restoreTask = (e) => {
   const taskId = e.target.parentElement.parentElement.id;
-  const index = deletedTasks.findIndex((task) => {
-    if (task.id === Number(taskId)) {
-      return true;
-    }
-  });
-  const taskIndexArr = deletedTasks.splice(index, 1);
-  const restoredTask = taskIndexArr.shift();
-  activeTasks.push(restoredTask);
-  renderTasks(deletedTasks, deletedTasksList);
-  updateValues("restore");
+
+  firestoreDeletedTasks
+    .doc(taskId)
+    .get()
+    .then((task) => {
+      firestoreActiveTasks.add(task.data());
+      firestoreDeletedTasks
+        .doc(taskId)
+        .delete()
+        .then(() => {});
+    })
+    .catch((error) => {});
 };
 
 function showActiveTasks() {
+  firestoreActiveTasks.onSnapshot((activeTasks) => renderTasks(activeTasks));
   deletedTasksList.style.display = "none";
   activeTasksList.style.display = "block";
   finishedTasksList.style.display = "none";
@@ -298,6 +277,9 @@ function showActiveTasks() {
   renderTasks(activeTasks, activeTasksList);
 }
 function showDeletedTasks() {
+  firestoreDeletedTasks.onSnapshot((deletedTasks) =>
+    renderDeletedTasks(deletedTasks)
+  );
   activeTasksList.style.display = "none";
   deletedTasksList.style.display = "block";
   finishedTasksList.style.display = "none";
@@ -306,12 +288,13 @@ function showDeletedTasks() {
   renderTasks(deletedTasks, deletedTasksList);
 }
 function showFinishedTasks() {
+  firestoreFinishedTasks.onSnapshot((finishedTasks) =>
+    renderFinishedTasks(finishedTasks)
+  );
   activeTasksList.style.display = "none";
   deletedTasksList.style.display = "none";
   finishedTasksList.style.display = "block";
   createTaskInput.disabled = true;
   message.style.display = "none";
-  renderTasks(finishedTasks, finishedTasksList);
+  renderFinishedTasks(finishedTasks, finishedTasksList);
 }
-
-console.log(activeTasks);

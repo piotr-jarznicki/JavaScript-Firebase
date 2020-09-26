@@ -4,18 +4,77 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ToDoApp</title>
-    <script
-      src="https://kit.fontawesome.com/88c9d13e24.js"
-      crossorigin="anonymous"
-    ></script>
+
     <link
       href="https://fonts.googleapis.com/css2?family=Ropa+Sans&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/88c9d13e24.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"
+      defer
+    ></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.21.1/firebase-firestore.js"
+      defer
+    ></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.21.1/firebase-auth.js"
+      defer
+    ></script>
+    <script src="firebase-config.js" defer></script>
+    <script src="app-main.js" defer></script>
   </head>
 
   <body>
+    <div class="login-page">
+      <h1>Epic to do list</h1>
+      <h2>Sign in</h2>
+      <form class="login-form" action="">
+        <label for="email">Email address</label>
+        <input
+          type="email"
+          name="email"
+          class="email-input email-input--login"
+        />
+        <label for="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="password-input password-input--login"
+        />
+        <button class="submit-sign-in">Sign in</button>
+        <p class="form-text">
+          Not registered already? Sign up
+          <a href="" class="sign-up-link">here</a>
+        </p>
+      </form>
+    </div>
+
+    <div class="register-page">
+      <h1>Epic to do list</h1>
+      <h2>Sign up</h2>
+      <form class="register-form" action="">
+        <label for="email">Email address</label>
+        <input type="email" name="email" class="email-input--register" />
+        <label for="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="password-input--register"
+        />
+        <button type="submit" class="submit-sign-in">Sign up</button>
+        <p class="form-text">
+          Already registered? Sign in
+          <a href="" class="sign-in-link">here</a>
+        </p>
+      </form>
+    </div>
+
     <div class="container">
       <h1 class="title">Epic to-do list</h1>
       <div class="input-container">
@@ -49,9 +108,9 @@
       </div>
 
       <div class="active">
-        <h2 class="message">
+        <!-- <h2 class="message">
           Your list of active tasks is empty, add some tasks!
-        </h2>
+        </h2> -->
         <ul class="active-tasks-list"></ul>
       </div>
       <div class="deleted-div">
@@ -61,6 +120,6 @@
         <ul class="finished-tasks-list"></ul>
       </div>
     </div>
-    <script src="app.js"></script>
+    <button class="submit-sign-in sign-out-button">Sign out</button>
   </body>
 </html>

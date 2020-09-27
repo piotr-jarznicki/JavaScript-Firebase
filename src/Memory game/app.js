@@ -93,15 +93,15 @@ const addTiles = () => {
   const sortedTilesImages = sortTilesImages();
   sortedTilesImages.forEach((el, index) => {
     const div = document.createElement("div");
+
     div.addEventListener("click", showTile);
     div.classList.add("game-tile");
-    div.innerHTML = `<img class = "hide" src = '${sortedTilesImages[index]}'>`;
+    div.innerHTML = `<img draggable = 'false' class = "hide" src = '${sortedTilesImages[index]}'>`;
     gameBoard.append(div);
   });
 };
 
 function showTile(e) {
-  // Mechanizm odkrywania karty i dodawania karty
   if (game.tilesChecked.length < 2) {
     e.target.classList.remove("hide");
     addTileToArray(e);
@@ -114,7 +114,6 @@ function showTile(e) {
 }
 
 function addTileToArray(e) {
-  // Jeśli dwa razy został kliknięty ten sam element i tablica jest już "zapełniona"
   if (
     game.tilesChecked.includes(e.target.parentNode) ||
     game.tilesChecked.length === 2
@@ -144,7 +143,6 @@ function checkPair() {
 }
 
 function checkResult() {
-  // Sprawdza czy gra została zakończona
   if (game.pairsArray.length === 20) {
     popUp.style.display = "flex";
   }

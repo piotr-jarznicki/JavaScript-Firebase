@@ -103,4 +103,4 @@ function playerFrameHandler() {
   }
 }
 
-setInterval(updateGameBoard, 50);
+setInterval(updateGameBoard, 30);

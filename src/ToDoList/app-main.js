@@ -2,10 +2,13 @@ firebase.initializeApp(firebaseConfig);
 const firestoreActiveTasks = firebase.firestore().collection("activeTasks");
 const firestoreFinishedTasks = firebase.firestore().collection("finishedTasks");
 const firestoreDeletedTasks = firebase.firestore().collection("deletedTasks");
-firestoreActiveTasks.onSnapshot((activeTasks) => renderTasks(activeTasks));
-firestoreActiveTasks.onSnapshot((activeTasks) => updateValues(activeTasks));
-firestoreDeletedTasks.onSnapshot((deletedTasks) => updateValues(deletedTasks));
-firestoreFinishedTasks.onSnapshot(() => updateValues);
+firestoreActiveTasks.onSnapshot((activeTasks) =>
+  renderActiveTasks(activeTasks)
+);
+firestoreActiveTasks.onSnapshot(() => updateValues());
+firestoreDeletedTasks.onSnapshot(() => updateValues());
+firestoreFinishedTasks.onSnapshot(() => updateValues());
+firestoreActiveTasks.onSnapshot(() => updateMessage());
 
 const get = (...args) => document.querySelector(...args);
 const getAll = (...args) => document.querySelectorAll(...args);
@@ -21,20 +24,6 @@ const activeTasksList = get(".active-tasks-list");
 const deletedTasksList = get(".deleted-tasks-list");
 const finishedTasksList = get(".finished-tasks-list");
 
-const numberOfTasks = getAll(".task-number");
-console.log(numberOfTasks)
-const message = get(".message");
-
-const inputContainer = get(".input-container");
-
-activeTasksTile.addEventListener("click", showActiveTasks);
-deletedTasksTile.addEventListener("click", showDeletedTasks);
-finishedTasksTile.addEventListener("click", showFinishedTasks);
-
-let activeTasks = [];
-let deletedTasks = [];
-let finishedTasks = [];
-
 const showSignUpModalButton = get(".sign-up-link");
 const showSignInModalButton = get(".sign-in-link");
 const signOutButton = get(".sign-out-button");
@@ -43,6 +32,19 @@ const signUpModal = get(".register-page");
 
 const registerForm = get(".register-form");
 const loginForm = get(".login-form");
+const message = get(".message");
+const inputContainer = get(".input-container");
+
+const numberOfTasks = getAll(".task-number");
+[
+  amountOfActiveTasks,
+  amountOfFinishedTasks,
+  amountOfDeletedTasks,
+] = numberOfTasks;
+
+activeTasksTile.addEventListener("click", showActiveTasks);
+deletedTasksTile.addEventListener("click", showDeletedTasks);
+finishedTasksTile.addEventListener("click", showFinishedTasks);
 
 registerForm.addEventListener("submit", signUpUser);
 loginForm.addEventListener("submit", signInUser);
@@ -50,7 +52,7 @@ loginForm.addEventListener("submit", signInUser);
 showSignUpModalButton.addEventListener("click", showSignUpModal);
 showSignInModalButton.addEventListener("click", showSignInModal);
 signOutButton.addEventListener("click", signOutUser);
-// e.preventDefault();
+
 function showSignUpModal(e) {
   e.preventDefault();
 
@@ -80,7 +82,8 @@ function signUpUser(e) {
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       showAppView();
-    }).catch(error => alert(error))
+    })
+    .catch((error) => alert(error));
 
   registerForm.reset();
 }
@@ -94,7 +97,7 @@ function signOutUser(e) {
     .then(() => {
       signInModal.style.display = "flex";
       signUpModal.style.display = "none";
-    })
+    });
 }
 
 function signInUser(e) {
@@ -107,30 +110,30 @@ function signInUser(e) {
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       showAppView();
-    }).catch(error => alert(error))
+    })
+    .catch((error) => alert(error));
   loginForm.reset();
 }
 
-function updateValues(tasks) {
-
-    firestoreActiveTasks.get().then((snap) => {
-      numberOfTasks[0].innerText = snap.size;
-    })
-    firestoreDeletedTasks.get().then((snap) => {
-      numberOfTasks[2].innerText = snap.size;
-    });
-  firestoreFinishedTasks.get().then((snap) => {
-    numberOfTasks[1].innerText = snap.size;
+function updateValues() {
+  firestoreActiveTasks.get().then((activeTasks) => {
+    amountOfActiveTasks.innerText = activeTasks.size;
+  });
+  firestoreFinishedTasks.get().then((finishedTasks) => {
+    amountOfFinishedTasks.innerText = finishedTasks.size;
+  });
+  firestoreDeletedTasks.get().then((deletedTasks) => {
+    amountOfDeletedTasks.innerText = deletedTasks.size;
   });
 }
 
 updateValues();
 const updateMessage = () => {
-  if (activeTasks.length > 0) {
-    message.style.display = "none";
-  } else {
-    message.style.display = "block";
-  }
+  firestoreActiveTasks.get().then((activeTasks) => {
+    activeTasks.size > 0
+      ? (message.style.display = "none")
+      : (message.style.display = "block");
+  });
 };
 
 createTaskButton.addEventListener("click", createTask);
@@ -142,12 +145,10 @@ function createTask() {
   isInputTextValueEqual0 || isInputTextValueTooLong
     ? alert("Add valid task text!")
     : firestoreActiveTasks.add({ text: inputText });
-
-  updateMessage();
   createTaskInput.value = "";
 }
 
-const renderTasks = (activeTasks) => {
+const renderActiveTasks = (activeTasks) => {
   activeTasksList.innerHTML = "";
   activeTasks !== undefined
     ? activeTasks.forEach((task) => {
@@ -163,7 +164,7 @@ const renderTasks = (activeTasks) => {
                </div>
    `;
       })
-    : console.log("elko");
+    : false;
 
   const deleteTaskButtons = getAll("li.task .task-container .delete-task");
   deleteTaskButtons.forEach((deleteButton) => {
@@ -231,12 +232,11 @@ const deleteTask = (e) => {
         });
     })
     .catch((error) => {});
-
-  updateMessage();
 };
 
 const finishTask = (e) => {
   const taskId = e.target.parentElement.parentElement.id;
+  e.target.parentElement.parentElement.classList.add("example");
   firestoreActiveTasks
     .doc(taskId)
     .get()
@@ -269,12 +269,13 @@ const restoreTask = (e) => {
 };
 
 function showActiveTasks() {
-  firestoreActiveTasks.onSnapshot((activeTasks) => renderTasks(activeTasks));
+  firestoreActiveTasks.onSnapshot((activeTasks) =>
+    renderActiveTasks(activeTasks)
+  );
   deletedTasksList.style.display = "none";
   activeTasksList.style.display = "block";
   finishedTasksList.style.display = "none";
   createTaskInput.disabled = false;
-  renderTasks(activeTasks, activeTasksList);
 }
 function showDeletedTasks() {
   firestoreDeletedTasks.onSnapshot((deletedTasks) =>
@@ -285,7 +286,6 @@ function showDeletedTasks() {
   finishedTasksList.style.display = "none";
   createTaskInput.disabled = true;
   message.style.display = "none";
-  renderTasks(deletedTasks, deletedTasksList);
 }
 function showFinishedTasks() {
   firestoreFinishedTasks.onSnapshot((finishedTasks) =>
@@ -296,5 +296,4 @@ function showFinishedTasks() {
   finishedTasksList.style.display = "block";
   createTaskInput.disabled = true;
   message.style.display = "none";
-  renderFinishedTasks(finishedTasks, finishedTasksList);
 }

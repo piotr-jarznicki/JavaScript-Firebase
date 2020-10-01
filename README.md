@@ -6,4 +6,3 @@ Repozytorium dla Projektu nr 2.
 
 - :heavy_check_mark: Memory game
 - :heavy_check_mark: To do list
-- :x: Bomberman game

@@ -231,12 +231,13 @@ const deleteTask = (e) => {
           console.log(el);
         });
     })
-    .catch((error) => {});
+    .catch((error) => {
+      alert(error);
+    });
 };
 
 const finishTask = (e) => {
   const taskId = e.target.parentElement.parentElement.id;
-  e.target.parentElement.parentElement.classList.add("example");
   firestoreActiveTasks
     .doc(taskId)
     .get()
@@ -249,7 +250,9 @@ const finishTask = (e) => {
           console.log(el);
         });
     })
-    .catch((error) => {});
+    .catch((error) => {
+      alert(error);
+    });
 };
 
 const restoreTask = (e) => {
@@ -265,7 +268,9 @@ const restoreTask = (e) => {
         .delete()
         .then(() => {});
     })
-    .catch((error) => {});
+    .catch((error) => {
+      alert(error);
+    });
 };
 
 function showActiveTasks() {

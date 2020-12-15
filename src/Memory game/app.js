@@ -13,6 +13,9 @@ buttonExit.addEventListener("click", exitPopUp);
 showHighscorePopUpButton.addEventListener("click", showHighscorePopUp);
 hideHighscorePopUpButton.addEventListener("click", hideHighscorePopUp);
 addUsernameButton.addEventListener("click", addUsername);
+
+let imagesArray = [];
+
 firebase
   .firestore()
   .collection("memo-highscores")
@@ -23,7 +26,6 @@ firebase
 
 function renderHighscores(highscores) {
   const list = document.querySelector(".highscore-list");
-
   list.innerHTML = "";
   highscores.forEach((highscore) => {
     const data = highscore.data();
@@ -96,8 +98,12 @@ const addTiles = () => {
 
     div.addEventListener("click", showTile);
     div.classList.add("game-tile");
-    div.innerHTML = `<img draggable = 'false' class = "hide" src = '${sortedTilesImages[index]}'>`;
+    const img = document.createElement("img");
+    img.setAttribute("draggable", "false");
+    img.src = `${sortedTilesImages[index]}`;
+    div.appendChild(img);
     gameBoard.append(div);
+    imagesArray.push(img);
   });
 };
 
@@ -158,6 +164,13 @@ function hideImage() {
   game.tilesChecked.length = "";
 }
 
+function setImagesVisibilitybleToNone() {
+  if (imagesArray.length === 20) {
+    imagesArray.forEach((el) => el.classList.add("hide"));
+  }
+  imagesArray = [];
+}
+
 function startGame() {
   gameBoard.innerHTML = "";
   addTiles();
@@ -165,6 +178,7 @@ function startGame() {
   game.tilesChecked = [];
   game.moves = 0;
   gameScore.innerText = game.moves;
+  setTimeout(setImagesVisibilitybleToNone, 2000);
 }
 
 function exitPopUp() {

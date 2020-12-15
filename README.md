@@ -15,4 +15,4 @@ This project needs no introduction. :sweat_smile:
 #### :wrench: Restoring deleted tasks back to the active tasks
 
 
-Simply click link in the about section of this repository or click here https://piotr-jarznicki.github.io/jfddr1-project-2/ to browse between projects. 
+Simply click link in the about section of this repository or go to https://piotr-jarznicki.github.io/JavaScript-Firebase/ to browse between projects. 
